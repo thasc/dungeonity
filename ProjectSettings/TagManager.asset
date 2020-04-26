@@ -38,6 +38,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: MainTilemap
+    uniqueID: 956435931
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: TileHighlighting
+    uniqueID: 148506743
     locked: 0

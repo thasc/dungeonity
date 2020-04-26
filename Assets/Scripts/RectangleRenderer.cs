@@ -22,6 +22,7 @@ public class RectangleRenderer : MonoBehaviour
         m_LineRenderer.positionCount = 4;
         m_LineRenderer.startWidth = 0.1f;
         m_LineRenderer.endWidth = 0.1f;
+        m_LineRenderer.sortingLayerID = SortingLayer.NameToID("TileHighlighting");
         m_LineRenderer.enabled = false;
     }
 
