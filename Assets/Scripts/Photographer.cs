@@ -28,8 +28,13 @@ public class Photographer : MonoBehaviour
         var mainCamera = Camera.main;
         mainCamera.enabled = false;
         m_Camera.enabled = true;
+        
+        // todo: adjust camera to capture the whole map to an adequately sized render texture 
     
         var image = RenderCameraView(m_Camera);
+        
+        // todo: crop image to the correct size for export
+        
         var bytes = image.EncodeToPNG();
         Destroy(image);
 
