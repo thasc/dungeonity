@@ -9,6 +9,7 @@ public class Photographer : MonoBehaviour
     private void Awake()
     {
         m_Camera = gameObject.AddComponent<Camera>();
+        // set m_Camera.aspect to determine its aspect ratio, and orthographicSize for size
         m_Camera.tag = "PhotographerCamera";
         m_Camera.orthographic = true;
         m_Camera.forceIntoRenderTexture = true;
