@@ -45,7 +45,7 @@ public class Photographer : MonoBehaviour
 
     private Texture2D RenderCameraView()
     {
-        const int pixelsPerTile = 64;
+        const int pixelsPerTile = 96;
         
         var dungeonWidthInPixels = m_DungeonStateManager.Width * pixelsPerTile;
         var dungeonHeightInPixels = m_DungeonStateManager.Height * pixelsPerTile;
@@ -57,10 +57,12 @@ public class Photographer : MonoBehaviour
         var suspendedRenderTexture = RenderTexture.active;
         //var targetTexture = new RenderTexture(1024, 1024, 16);
         //targetTexture.Create();
-        var targetTexture = RenderTexture.GetTemporary(1024, 1024);
+        var targetTexture = RenderTexture.GetTemporary(dungeonWidthInPixels, dungeonHeightInPixels);
         RenderTexture.active = m_Camera.targetTexture = targetTexture;
         
         m_Camera.transform.position = new Vector3(m_DungeonStateManager.Width/2f, m_DungeonStateManager.Height/2f, -10);
+        m_Camera.aspect = (dungeonWidthInPixels * 1f) / dungeonHeightInPixels;
+        m_Camera.orthographicSize = m_DungeonStateManager.Height / 2f;
         m_Camera.Render();
         var image = new Texture2D(targetTexture.width, targetTexture.height);
         image.ReadPixels(new Rect(0, 0, targetTexture.width, targetTexture.height), 0, 0);
