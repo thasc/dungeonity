@@ -18,6 +18,7 @@ public class MainTileMapInitialiser : MonoBehaviour
     private void Start()
     {
         var tileMap = GetComponent<Tilemap>();
+        tileMap.origin = Vector3Int.zero;
         tileMap.size = new Vector3Int(m_DungeonStateManager.Width, m_DungeonStateManager.Height, 0);
         tileMap.ResizeBounds();
         tileMap.FloodFill(new Vector3Int(0, 0, 0), InitialTile);
