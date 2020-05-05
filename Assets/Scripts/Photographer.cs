@@ -31,6 +31,8 @@ public class Photographer : MonoBehaviour
 
     private void Snap()
     {
+        var start = DateTime.UtcNow;
+        
         var image = RenderCameraView();
         
         // todo: crop image to the correct size for export
@@ -41,6 +43,8 @@ public class Photographer : MonoBehaviour
         var captureFolder = Path.Combine(Application.dataPath, "Captures");
         Directory.CreateDirectory(captureFolder);
         File.WriteAllBytes(Path.Combine(captureFolder, DateTime.UtcNow.Ticks + ".png"), bytes);
+        
+        Debug.Log($"Wrote dungeon out in {(DateTime.UtcNow - start).Milliseconds}ms");
     }
 
     private Texture2D RenderCameraView()
