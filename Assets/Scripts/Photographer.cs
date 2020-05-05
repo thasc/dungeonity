@@ -49,7 +49,7 @@ public class Photographer : MonoBehaviour
 
     private Texture2D RenderCameraView()
     {
-        const int pixelsPerTile = 96;
+        const int pixelsPerTile = 64;
         
         var dungeonWidthInPixels = m_DungeonStateManager.Width * pixelsPerTile;
         var dungeonHeightInPixels = m_DungeonStateManager.Height * pixelsPerTile;
