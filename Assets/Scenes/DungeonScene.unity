@@ -554,6 +554,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OpenFloorTile: {fileID: 11400000, guid: 7252b63be3829a343b13208785e4a618, type: 2}
+  ClosedFloorTile: {fileID: 11400000, guid: 1af22db5cb719f14cbb204806cd3ad96, type: 2}
   WallTilemap: {fileID: 1456538435}
 --- !u!61 &965223916
 BoxCollider2D:

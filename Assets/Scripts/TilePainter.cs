@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 public class TilePainter : MonoBehaviour
 {
     public Tile OpenFloorTile;
+    public Tile ClosedFloorTile;
     public Tilemap WallTilemap;
     
     private Tilemap m_FloorTilemap;
@@ -50,7 +51,7 @@ public class TilePainter : MonoBehaviour
     {
         m_DragSelectionRenderer.Clear();
         var endPosition = m_FloorTilemap.TileUnderMouse(m_MainCamera);
-        m_FloorTilemap.BetterBoxFill(OpenFloorTile, m_DragStart, endPosition);
+        m_FloorTilemap.BetterBoxFill(Input.GetKey(KeyCode.LeftAlt) ? ClosedFloorTile : OpenFloorTile, m_DragStart, endPosition);
 
         var cornerOne = new Vector2Int(Math.Min(m_DragStart.x, endPosition.x), Math.Min(m_DragStart.y, endPosition.y));
         var cornerTwo = new Vector2Int(Math.Max(m_DragStart.x, endPosition.x), Math.Max(m_DragStart.y, endPosition.y));
@@ -76,8 +77,8 @@ public class TilePainter : MonoBehaviour
 
         if (!IsTileOpen(thisTile))
         {
-            return; // only want to adjust walls for open tiles, for this exact moment
-            // might change later when we start painting tiles closed
+            WallTilemap.SetTile(thisTile, null);
+            return;
         }
 
         var northWestOpen = IsTileOpen(thisTile + Vector3Int.up + Vector3Int.left);
