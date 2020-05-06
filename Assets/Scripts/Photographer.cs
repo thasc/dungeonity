@@ -35,8 +35,6 @@ public class Photographer : MonoBehaviour
         
         var image = RenderCameraView();
         
-        // todo: crop image to the correct size for export
-        
         var bytes = image.EncodeToPNG();
         Destroy(image);
 
