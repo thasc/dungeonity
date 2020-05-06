@@ -23,11 +23,11 @@ public class TilePainter : MonoBehaviour
         for (var y = bounds.yMin; y < bounds.yMax; y++)
         for (var x = bounds.xMin; x < bounds.xMax; x++)
         {
-            var where = new Vector2Int(x, y);
-            FillTiles(tilesToApply[x - bounds.xMin, y - bounds.yMin], where, where, true);
+            var tileToApply = tilesToApply[x - bounds.xMin, y - bounds.yMin];
+            FillTiles(tileToApply, new RectInt(x, y, 1, 1), true);
         }
         
-        UpdateTilesWalls(new Vector2Int(bounds.xMin, bounds.yMin), new Vector2Int(bounds.xMax, bounds.yMax));
+        UpdateTilesWalls(bounds);
     }
 
     private void Awake()
@@ -65,27 +65,34 @@ public class TilePainter : MonoBehaviour
         
         var tileToApply = Input.GetKey(KeyCode.LeftAlt) ? ClosedFloorTile : OpenFloorTile;
         var endPosition = m_FloorTilemap.TileUnderMouse(m_MainCamera);
+
+        var xMin = Math.Min(m_DragStart.x, endPosition.x);
+        var yMin = Math.Min(m_DragStart.y, endPosition.y);
+        var xMax = Math.Max(m_DragStart.x, endPosition.x);
+        var yMax = Math.Max(m_DragStart.y, endPosition.y);
         
-        var cornerOne = new Vector2Int(Math.Min(m_DragStart.x, endPosition.x), Math.Min(m_DragStart.y, endPosition.y));
-        var cornerTwo = new Vector2Int(Math.Max(m_DragStart.x, endPosition.x), Math.Max(m_DragStart.y, endPosition.y));
+        var position = new Vector2Int(xMin, yMin);
+        var size = new Vector2Int(xMax - xMin + 1, yMax - yMin + 1);
         
-        FillTiles(tileToApply, cornerOne, cornerTwo);
-        UpdateTilesWalls(cornerOne, cornerTwo);
+        var bounds = new RectInt(position, size);
+        
+        FillTiles(tileToApply, bounds);
+        UpdateTilesWalls(bounds);
 
         m_DragStart = s_DragStartNullObject;
         m_LastDragPosition = s_DragStartNullObject;
     }
 
-    private void FillTiles(Tile tileToApply, Vector2Int cornerOne, Vector2Int cornerTwo, bool undoing = false)
+    private void FillTiles(Tile tileToApply, RectInt bounds, bool undoing = false)
     {
-        if (!undoing) PushToUndoManager(cornerOne, cornerTwo);
-        m_FloorTilemap.BetterBoxFill(tileToApply, cornerOne, cornerTwo);
+        if (!undoing) PushToUndoManager(bounds);
+        m_FloorTilemap.BetterBoxFill(tileToApply, bounds);
     }
 
-    private void UpdateTilesWalls(Vector2Int cornerOne, Vector2Int cornerTwo)
+    private void UpdateTilesWalls(RectInt bounds)
     {
-        for (var y = cornerOne.y - 1; y < cornerTwo.y + 2; y++)
-        for (var x = cornerOne.x - 1; x < cornerTwo.x + 2; x++)
+        for (var y = bounds.yMin - 1; y < bounds.yMax + 1; y++)
+        for (var x = bounds.xMin - 1; x < bounds.xMax + 1; x++)
         {
             if (x >= 0 && x <= m_FloorTilemap.size.x && y >= 0 && y <= m_FloorTilemap.size.y)
             {
@@ -94,10 +101,10 @@ public class TilePainter : MonoBehaviour
         }
     }
 
-    private void PushToUndoManager(Vector2Int cornerOne, Vector2Int cornerTwo)
+    private void PushToUndoManager(RectInt bounds)
     {
-        var selectionWidth = cornerTwo.x - cornerOne.x + 1;
-        var selectionHeight = cornerTwo.y - cornerOne.y + 1;
+        var selectionWidth = bounds.width;
+        var selectionHeight = bounds.height;
         
         var currentTiles = new Tile[selectionWidth, selectionHeight];
         for (var y = 0; y < selectionHeight; y++)
@@ -105,11 +112,11 @@ public class TilePainter : MonoBehaviour
         {
             if (x >= 0 && x <= m_FloorTilemap.size.x && y >= 0 && y <= m_FloorTilemap.size.y)
             {
-                currentTiles[x, y] = m_FloorTilemap.GetTile<Tile>(new Vector3Int(cornerOne.x + x, cornerOne.y + y, 0));
+                currentTiles[x, y] = m_FloorTilemap.GetTile<Tile>(new Vector3Int(bounds.xMin + x, bounds.yMin + y, 0));
             }
         }
 
-        UndoManager.Push(new RectInt(cornerOne.x, cornerOne.y, selectionWidth, selectionHeight), currentTiles);
+        UndoManager.Push(bounds, currentTiles);
     }
 
     private void UpdateSingleTileWalls(int x, int y)

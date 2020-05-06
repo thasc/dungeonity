@@ -6,14 +6,11 @@ namespace Code
 {
     public static class TilemapExtensions
     {
-        public static void BetterBoxFill(this Tilemap self,
-            TileBase tile,
-            Vector2Int cornerOne,
-            Vector2Int cornerTwo)
+        public static void BetterBoxFill(this Tilemap self, TileBase tile, RectInt bounds)
         {
-            for (var xx = cornerOne.x; xx <= cornerTwo.x; xx++)
+            for (var xx = bounds.xMin; xx < bounds.xMax; xx++)
             {
-                for (var yy = cornerOne.y; yy <= cornerTwo.y; yy++)
+                for (var yy = bounds.yMin; yy < bounds.yMax; yy++)
                 {
                     self.SetTile(new Vector3Int(xx, yy, 0), tile);
                 }
