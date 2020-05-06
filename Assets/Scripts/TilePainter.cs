@@ -23,9 +23,11 @@ public class TilePainter : MonoBehaviour
         for (var y = bounds.yMin; y < bounds.yMax; y++)
         for (var x = bounds.xMin; x < bounds.xMax; x++)
         {
-            var where = new Vector3Int(x, y, 0);
+            var where = new Vector2Int(x, y);
             FillTiles(tilesToApply[x - bounds.xMin, y - bounds.yMin], where, where, true);
         }
+        
+        UpdateTilesWalls(new Vector2Int(bounds.xMin, bounds.yMin), new Vector2Int(bounds.xMax, bounds.yMax));
     }
 
     private void Awake()
@@ -63,36 +65,39 @@ public class TilePainter : MonoBehaviour
         
         var tileToApply = Input.GetKey(KeyCode.LeftAlt) ? ClosedFloorTile : OpenFloorTile;
         var endPosition = m_FloorTilemap.TileUnderMouse(m_MainCamera);
-        FillTiles(tileToApply, m_DragStart, endPosition);
+        
+        var cornerOne = new Vector2Int(Math.Min(m_DragStart.x, endPosition.x), Math.Min(m_DragStart.y, endPosition.y));
+        var cornerTwo = new Vector2Int(Math.Max(m_DragStart.x, endPosition.x), Math.Max(m_DragStart.y, endPosition.y));
+        
+        FillTiles(tileToApply, cornerOne, cornerTwo);
+        UpdateTilesWalls(cornerOne, cornerTwo);
 
         m_DragStart = s_DragStartNullObject;
         m_LastDragPosition = s_DragStartNullObject;
     }
 
-    private void FillTiles(Tile tileToApply, Vector3Int startPosition, Vector3Int endPosition, bool undoing = false)
+    private void FillTiles(Tile tileToApply, Vector2Int cornerOne, Vector2Int cornerTwo, bool undoing = false)
     {
-        var cornerOne = new Vector2Int(Math.Min(startPosition.x, endPosition.x), Math.Min(startPosition.y, endPosition.y));
-        var cornerTwo = new Vector2Int(Math.Max(startPosition.x, endPosition.x) + 1, Math.Max(startPosition.y, endPosition.y) + 1);
-
         if (!undoing) PushToUndoManager(cornerOne, cornerTwo);
-        
-        m_FloorTilemap.BetterBoxFill(tileToApply, startPosition, endPosition);
+        m_FloorTilemap.BetterBoxFill(tileToApply, cornerOne, cornerTwo);
+    }
 
-        // might want to suspend this until after the undo is done since it does one tile at a time
-        for (var y = cornerOne.y - 1; y < cornerTwo.y + 1; y++)
-        for (var x = cornerOne.x - 1; x < cornerTwo.x + 1; x++)
+    private void UpdateTilesWalls(Vector2Int cornerOne, Vector2Int cornerTwo)
+    {
+        for (var y = cornerOne.y - 1; y < cornerTwo.y + 2; y++)
+        for (var x = cornerOne.x - 1; x < cornerTwo.x + 2; x++)
         {
             if (x >= 0 && x <= m_FloorTilemap.size.x && y >= 0 && y <= m_FloorTilemap.size.y)
             {
-                UpdateTile(x, y);
+                UpdateSingleTileWalls(x, y);
             }
         }
     }
 
     private void PushToUndoManager(Vector2Int cornerOne, Vector2Int cornerTwo)
     {
-        var selectionWidth = cornerTwo.x - cornerOne.x;
-        var selectionHeight = cornerTwo.y - cornerOne.y;
+        var selectionWidth = cornerTwo.x - cornerOne.x + 1;
+        var selectionHeight = cornerTwo.y - cornerOne.y + 1;
         
         var currentTiles = new Tile[selectionWidth, selectionHeight];
         for (var y = 0; y < selectionHeight; y++)
@@ -104,10 +109,10 @@ public class TilePainter : MonoBehaviour
             }
         }
 
-        UndoManager.Push(new RectInt(cornerOne.x, cornerOne.y,cornerTwo.x - cornerOne.x, cornerTwo.y - cornerOne.y), currentTiles);
+        UndoManager.Push(new RectInt(cornerOne.x, cornerOne.y, selectionWidth, selectionHeight), currentTiles);
     }
 
-    private void UpdateTile(int x, int y)
+    private void UpdateSingleTileWalls(int x, int y)
     {
         var tileIndex = 0;
         

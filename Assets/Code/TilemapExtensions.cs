@@ -8,17 +8,12 @@ namespace Code
     {
         public static void BetterBoxFill(this Tilemap self,
             TileBase tile,
-            Vector3Int startPosition,
-            Vector3Int endPosition)
+            Vector2Int cornerOne,
+            Vector2Int cornerTwo)
         {
-            var minX = Math.Min(startPosition.x, endPosition.x);
-            var minY = Math.Min(startPosition.y, endPosition.y);
-            var maxX = Math.Max(startPosition.x, endPosition.x);
-            var maxY = Math.Max(startPosition.y, endPosition.y);
-            
-            for (var xx = minX; xx <= maxX; xx++)
+            for (var xx = cornerOne.x; xx <= cornerTwo.x; xx++)
             {
-                for (var yy = minY; yy <= maxY; yy++)
+                for (var yy = cornerOne.y; yy <= cornerTwo.y; yy++)
                 {
                     self.SetTile(new Vector3Int(xx, yy, 0), tile);
                 }
