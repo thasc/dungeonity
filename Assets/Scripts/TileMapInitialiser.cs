@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class MainTileMapInitialiser : MonoBehaviour
+public class TileMapInitialiser : MonoBehaviour
 {
     public Tile InitialTile;
     
@@ -33,8 +33,11 @@ public class MainTileMapInitialiser : MonoBehaviour
         m_TileMap.ResizeBounds();
 
         var tileMapSize = new Vector2(m_TileMap.size.x, m_TileMap.size.y);
-        
-        m_Collider.size = tileMapSize;
-        m_Collider.offset = tileMapSize / 2;
+
+        if (m_Collider != null)
+        {
+            m_Collider.size = tileMapSize;
+            m_Collider.offset = tileMapSize / 2;
+        }
     }
 }
