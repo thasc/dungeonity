@@ -55,8 +55,6 @@ public class TilePainter : MonoBehaviour
         var cornerOne = new Vector2Int(Math.Min(m_DragStart.x, endPosition.x), Math.Min(m_DragStart.y, endPosition.y));
         var cornerTwo = new Vector2Int(Math.Max(m_DragStart.x, endPosition.x), Math.Max(m_DragStart.y, endPosition.y));
         
-        Debug.Log($"Writing tiles from {cornerOne} to {cornerTwo}");
-        
         for (var y = cornerOne.y - 1; y < cornerTwo.y + 2; y++)
         for (var x = cornerOne.x - 1; x < cornerTwo.x + 2; x++)
         {
