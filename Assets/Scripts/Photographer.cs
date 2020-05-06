@@ -13,10 +13,7 @@ public class Photographer : MonoBehaviour
                                     ?.GetComponent<DungeonStateManager>() ??
                                 throw new ArgumentNullException(nameof(m_DungeonStateManager));
         
-        m_Camera = gameObject.AddComponent<Camera>();
-        // set m_Camera.aspect to determine its aspect ratio, and orthographicSize for size
-        m_Camera.tag = "PhotographerCamera";
-        m_Camera.orthographic = true;
+        m_Camera = gameObject.GetComponent<Camera>();
         m_Camera.forceIntoRenderTexture = true;
         m_Camera.enabled = false;
     }
