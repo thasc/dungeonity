@@ -100,7 +100,7 @@ public class TilePainter : MonoBehaviour
         {
             if (x >= 0 && x <= m_FloorTilemap.size.x && y >= 0 && y <= m_FloorTilemap.size.y)
             {
-                currentTiles[x, y] = m_FloorTilemap.GetTile<Tile>(new Vector3Int(cornerOne.x + x, cornerTwo.y + y, 0));
+                currentTiles[x, y] = m_FloorTilemap.GetTile<Tile>(new Vector3Int(cornerOne.x + x, cornerOne.y + y, 0));
             }
         }
 
