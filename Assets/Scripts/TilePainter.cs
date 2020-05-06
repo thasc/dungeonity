@@ -100,7 +100,7 @@ public class TilePainter : MonoBehaviour
         if (southOpen) tileIndex += 64;
         if (southEastOpen) tileIndex += 128;
 
-        var tile = AssetDatabase.LoadAssetAtPath<Tile>($"Assets/Tiles/Generated/wallsandcorners_{tileIndex}.asset");
+        var tile = Resources.Load<Tile>($"GeneratedTiles/wallsandcorners_{tileIndex}");
         WallTilemap.SetTile(thisTile, tile);
     }
 
