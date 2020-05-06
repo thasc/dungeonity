@@ -393,6 +393,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 075e6812c1f864e46a945c2317de0447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &924128208
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 924128209}
+  - component: {fileID: 924128210}
+  m_Layer: 0
+  m_Name: UndoManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &924128209
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924128208}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &924128210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924128208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a95409d518c529643b11cf05c272474f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TilePainter: {fileID: 965223915}
 --- !u!1 &965223911
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,6 +600,7 @@ MonoBehaviour:
   OpenFloorTile: {fileID: 11400000, guid: 7252b63be3829a343b13208785e4a618, type: 2}
   ClosedFloorTile: {fileID: 11400000, guid: 1af22db5cb719f14cbb204806cd3ad96, type: 2}
   WallTilemap: {fileID: 1456538435}
+  UndoManager: {fileID: 924128210}
 --- !u!61 &965223916
 BoxCollider2D:
   m_ObjectHideFlags: 0

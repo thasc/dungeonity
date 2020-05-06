@@ -1,6 +1,5 @@
 ﻿using System;
 using Code;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -9,6 +8,7 @@ public class TilePainter : MonoBehaviour
     public Tile OpenFloorTile;
     public Tile ClosedFloorTile;
     public Tilemap WallTilemap;
+    public UndoManager UndoManager;
     
     private Tilemap m_FloorTilemap;
     private Camera m_MainCamera;
@@ -17,6 +17,16 @@ public class TilePainter : MonoBehaviour
     private Vector3Int m_DragStart = s_DragStartNullObject;
     private Vector3Int m_LastDragPosition = s_DragStartNullObject;
     private RectangleRenderer m_DragSelectionRenderer;
+
+    public void ApplyTiles(RectInt bounds, Tile[,] tilesToApply)
+    {
+        for (var y = bounds.yMin; y < bounds.yMax; y++)
+        for (var x = bounds.xMin; x < bounds.xMax; x++)
+        {
+            var where = new Vector3Int(x, y, 0);
+            FillTiles(tilesToApply[x - bounds.xMin, y - bounds.yMin], where, where, true);
+        }
+    }
 
     private void Awake()
     {
@@ -50,23 +60,51 @@ public class TilePainter : MonoBehaviour
     private void OnMouseUp()
     {
         m_DragSelectionRenderer.Clear();
-        var endPosition = m_FloorTilemap.TileUnderMouse(m_MainCamera);
-        m_FloorTilemap.BetterBoxFill(Input.GetKey(KeyCode.LeftAlt) ? ClosedFloorTile : OpenFloorTile, m_DragStart, endPosition);
-
-        var cornerOne = new Vector2Int(Math.Min(m_DragStart.x, endPosition.x), Math.Min(m_DragStart.y, endPosition.y));
-        var cornerTwo = new Vector2Int(Math.Max(m_DragStart.x, endPosition.x), Math.Max(m_DragStart.y, endPosition.y));
         
-        for (var y = cornerOne.y - 1; y < cornerTwo.y + 2; y++)
-        for (var x = cornerOne.x - 1; x < cornerTwo.x + 2; x++)
+        var tileToApply = Input.GetKey(KeyCode.LeftAlt) ? ClosedFloorTile : OpenFloorTile;
+        var endPosition = m_FloorTilemap.TileUnderMouse(m_MainCamera);
+        FillTiles(tileToApply, m_DragStart, endPosition);
+
+        m_DragStart = s_DragStartNullObject;
+        m_LastDragPosition = s_DragStartNullObject;
+    }
+
+    private void FillTiles(Tile tileToApply, Vector3Int startPosition, Vector3Int endPosition, bool undoing = false)
+    {
+        var cornerOne = new Vector2Int(Math.Min(startPosition.x, endPosition.x), Math.Min(startPosition.y, endPosition.y));
+        var cornerTwo = new Vector2Int(Math.Max(startPosition.x, endPosition.x) + 1, Math.Max(startPosition.y, endPosition.y) + 1);
+
+        if (!undoing) PushToUndoManager(cornerOne, cornerTwo);
+        
+        m_FloorTilemap.BetterBoxFill(tileToApply, startPosition, endPosition);
+
+        // might want to suspend this until after the undo is done since it does one tile at a time
+        for (var y = cornerOne.y - 1; y < cornerTwo.y + 1; y++)
+        for (var x = cornerOne.x - 1; x < cornerTwo.x + 1; x++)
         {
             if (x >= 0 && x <= m_FloorTilemap.size.x && y >= 0 && y <= m_FloorTilemap.size.y)
             {
                 UpdateTile(x, y);
             }
         }
+    }
+
+    private void PushToUndoManager(Vector2Int cornerOne, Vector2Int cornerTwo)
+    {
+        var selectionWidth = cornerTwo.x - cornerOne.x;
+        var selectionHeight = cornerTwo.y - cornerOne.y;
         
-        m_DragStart = s_DragStartNullObject;
-        m_LastDragPosition = s_DragStartNullObject;
+        var currentTiles = new Tile[selectionWidth, selectionHeight];
+        for (var y = 0; y < selectionHeight; y++)
+        for (var x = 0; x < selectionWidth; x++)
+        {
+            if (x >= 0 && x <= m_FloorTilemap.size.x && y >= 0 && y <= m_FloorTilemap.size.y)
+            {
+                currentTiles[x, y] = m_FloorTilemap.GetTile<Tile>(new Vector3Int(cornerOne.x + x, cornerTwo.y + y, 0));
+            }
+        }
+
+        UndoManager.Push(new RectInt(cornerOne.x, cornerOne.y,cornerTwo.x - cornerOne.x, cornerTwo.y - cornerOne.y), currentTiles);
     }
 
     private void UpdateTile(int x, int y)
