@@ -683,7 +683,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1292e63a154f98743811be6be8fedf1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InitialTile: {fileID: 11400000, guid: 1af22db5cb719f14cbb204806cd3ad96, type: 2}
+  OpenFloorTile: {fileID: 11400000, guid: 7252b63be3829a343b13208785e4a618, type: 2}
+  ClosedFloorTile: {fileID: 11400000, guid: 1af22db5cb719f14cbb204806cd3ad96, type: 2}
 --- !u!1 &1130909653
 GameObject:
   m_ObjectHideFlags: 0
@@ -814,7 +815,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1292e63a154f98743811be6be8fedf1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InitialTile: {fileID: 11400000, guid: 7e627407e0b16b44081893b86157c85c, type: 2}
+  OpenFloorTile: {fileID: 0}
+  ClosedFloorTile: {fileID: 0}
 --- !u!1 &1377584516
 GameObject:
   m_ObjectHideFlags: 0

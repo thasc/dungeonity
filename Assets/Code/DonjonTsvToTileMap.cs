@@ -42,7 +42,7 @@ public static class DonjonTsvToTileMap
                 {
                     var tileKey = tsvFileContent[tileY].Substring(cursorStart, cursorEnd - cursorStart);
                     // empty contents == empty tile, otherwise most things are open floors as far as we're concerned
-                    tileMap[tileX, tileY] = tileSelector(tileKey);
+                    tileMap[tileX, tsvFileContent.Length - 1 - tileY] = tileSelector(tileKey);
                     
                     // advance to next tile
                     cursorStart = cursorEnd + 1;

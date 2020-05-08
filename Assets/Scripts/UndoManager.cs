@@ -47,7 +47,7 @@ public class UndoManager : MonoBehaviour
         if (undoJobIndex < 0) undoJobIndex += m_UndoQueue.Length;
         var undoJob = m_UndoQueue[undoJobIndex];
         
-        TilePainter.ApplyTiles(undoJob.Bounds, undoJob.TilesToApply);
+        TilePainter.ApplyTiles(undoJob.Bounds, undoJob.TilesToApply, false);
 
         DecrementCursor();
         m_ItemsCount--;

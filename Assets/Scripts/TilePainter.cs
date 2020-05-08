@@ -18,13 +18,13 @@ public class TilePainter : MonoBehaviour
     private Vector3Int m_LastDragPosition = s_DragStartNullObject;
     private RectangleRenderer m_DragSelectionRenderer;
 
-    public void ApplyTiles(RectInt bounds, Tile[,] tilesToApply)
+    public void ApplyTiles(RectInt bounds, Tile[,] tilesToApply, bool recordToUndoStack)
     {
         for (var y = bounds.yMin; y < bounds.yMax; y++)
         for (var x = bounds.xMin; x < bounds.xMax; x++)
         {
             var tileToApply = tilesToApply[x - bounds.xMin, y - bounds.yMin];
-            FillTiles(tileToApply, new RectInt(x, y, 1, 1), true);
+            FillTiles(tileToApply, new RectInt(x, y, 1, 1), recordToUndoStack);
         }
         
         UpdateTilesWalls(bounds);
@@ -83,9 +83,9 @@ public class TilePainter : MonoBehaviour
         m_LastDragPosition = s_DragStartNullObject;
     }
 
-    private void FillTiles(Tile tileToApply, RectInt bounds, bool undoing = false)
+    private void FillTiles(Tile tileToApply, RectInt bounds, bool recordToUndoStack = true)
     {
-        if (!undoing) PushToUndoManager(bounds);
+        if (recordToUndoStack) PushToUndoManager(bounds);
         m_FloorTilemap.BetterBoxFill(tileToApply, bounds);
     }
 
