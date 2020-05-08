@@ -24,8 +24,8 @@ public static class DonjonTsvToTileMap
             throw new ArgumentException($"File at {tsvFilePath} was empty, check your input");
         }
 
-        // every single line has exactly the same number of tab chars in it, equal to the tile width of the dungeon
-        var tilesWide = tsvFileContent[0].Count(c => c == '\t');
+        // every single line has exactly the same number of tab chars in it, equal to the tile width of the dungeon - 1
+        var tilesWide = tsvFileContent[0].Count(c => c == '\t') + 1;
         var tilesHeight = tsvFileContent.Length;
 
         var tileMap = new Tile[tilesWide, tilesHeight];
@@ -49,6 +49,8 @@ public static class DonjonTsvToTileMap
                     tileX++;
                 }
             }
+            
+            tileMap[tileX, tsvFileContent.Length - 1 - tileY] = tileSelector(string.Empty);
         }
 
         return tileMap;

@@ -58,6 +58,9 @@ namespace Dungeon
                 ClosedFloorFile);
             
             var size = new Vector2Int(donjon.GetLength(0), donjon.GetLength(1));
+
+            m_DungeonStateManager.Width = size.x;
+            m_DungeonStateManager.Height = size.y;
             
             foreach (var tileMap in AllTileMaps)
             {
