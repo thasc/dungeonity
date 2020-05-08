@@ -20,7 +20,10 @@ public class Photographer : MonoBehaviour
     
     private void LateUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.F9))
+        var hitF9 = Input.GetKeyDown(KeyCode.F9);
+        var hitCtrlS = Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.S);
+        
+        if (hitF9 || hitCtrlS)
         {
             Snap();  
         }
