@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -10,6 +11,7 @@ namespace Setup
     {
         public InputField WidthField;
         public InputField HeightField;
+        public InputField DonjonField;
         public Text ValidationErrorText;
     
         private DungeonStateManager m_DungeonStateManager;
@@ -56,6 +58,19 @@ namespace Setup
 
         public void TryStart()
         {
+            if (!string.IsNullOrEmpty(DonjonField.text))
+            {
+                if (!File.Exists(DonjonField.text))
+                {
+                    ValidationErrorText.text = "Couldn't find that Donjon file";
+                    return;
+                }
+
+                m_DungeonStateManager.DonjonTsvFilePath = DonjonField.text;
+                SceneManager.LoadScene("DungeonScene");
+                return;
+            }
+            
             if (!int.TryParse(WidthField.text, out var widthValue) || widthValue < 1)
             {
                 ValidationErrorText.text = "Check your width value";
