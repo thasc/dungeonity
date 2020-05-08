@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace Code
@@ -21,6 +20,13 @@ namespace Code
         {
             var mouseWorldPos = camera.ScreenToWorldPoint(Input.mousePosition);
             return self.WorldToCell(mouseWorldPos);
+        }
+
+        public static void SetSize(this Tilemap self, Vector2Int size)
+        {
+            self.origin = Vector3Int.zero;
+            self.size = new Vector3Int(size.x, size.y, 0);
+            self.ResizeBounds();
         }
     }
 }

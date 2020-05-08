@@ -1263,6 +1263,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Width: 0
   Height: 0
+  DonjonTsvFilePath: C:\Users\Home\Documents\test-donjon.tsv
 --- !u!1 &1621002715
 GameObject:
   m_ObjectHideFlags: 0
@@ -1380,7 +1381,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1627227052}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: acbdf097ebab0a64ea5162dd155d7582, type: 3}
+  m_Script: {fileID: 11500000, guid: da8390e0131083146b2fd3e85359a316, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   WidthField: {fileID: 809902332}
