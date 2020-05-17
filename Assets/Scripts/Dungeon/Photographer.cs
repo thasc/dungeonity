@@ -37,7 +37,7 @@ namespace Dungeon
             var bytes = image.EncodeToPNG();
             Destroy(image);
 
-            var captureName = $"{DateTime.UtcNow:yyyyMMdd-hhmmsszz}-{m_DungeonStateManager.Width}x{m_DungeonStateManager.Height}.png";
+            var captureName = $"{DateTime.Now:yyyyMMdd-hhmmsszz}-{m_DungeonStateManager.Width}x{m_DungeonStateManager.Height}.png";
             var captureFolder = Path.Combine(Application.dataPath, "Captures");
             Directory.CreateDirectory(captureFolder);
             File.WriteAllBytes(Path.Combine(captureFolder, captureName), bytes);
