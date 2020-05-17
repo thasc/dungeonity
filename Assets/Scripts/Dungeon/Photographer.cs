@@ -33,18 +33,14 @@ namespace Dungeon
 
         private void Snap()
         {
-            var start = DateTime.UtcNow;
-        
             var image = RenderCameraView();
-        
             var bytes = image.EncodeToPNG();
             Destroy(image);
 
+            var captureName = $"{DateTime.UtcNow:yyyyMMdd-hhmmsszz}-{m_DungeonStateManager.Width}x{m_DungeonStateManager.Height}.png";
             var captureFolder = Path.Combine(Application.dataPath, "Captures");
             Directory.CreateDirectory(captureFolder);
-            File.WriteAllBytes(Path.Combine(captureFolder, DateTime.UtcNow.Ticks + ".png"), bytes);
-        
-            Debug.Log($"Wrote dungeon out in {(DateTime.UtcNow - start).Milliseconds}ms");
+            File.WriteAllBytes(Path.Combine(captureFolder, captureName), bytes);
         }
 
         private Texture2D RenderCameraView()
@@ -59,8 +55,6 @@ namespace Dungeon
             m_Camera.enabled = true;
         
             var suspendedRenderTexture = RenderTexture.active;
-            //var targetTexture = new RenderTexture(1024, 1024, 16);
-            //targetTexture.Create();
             var targetTexture = RenderTexture.GetTemporary(dungeonWidthInPixels, dungeonHeightInPixels);
             RenderTexture.active = m_Camera.targetTexture = targetTexture;
         
@@ -74,7 +68,6 @@ namespace Dungeon
 
             m_Camera.targetTexture = null;    
             RenderTexture.active = suspendedRenderTexture;
-            //targetTexture.Release();
             RenderTexture.ReleaseTemporary(targetTexture);
         
             m_Camera.enabled = false;
