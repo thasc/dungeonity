@@ -39,7 +39,7 @@ namespace Dungeon
                                  $"{nameof(TilePainter)} must be the sibling of a {nameof(Tilemap)}");
             m_MainCamera = Camera.main;
         
-            m_DragSelectionRenderer = gameObject.AddComponent<RectangleRenderer>();
+            m_DragSelectionRenderer = gameObject.GetComponent<RectangleRenderer>();
             m_DragSelectionRenderer.LineWidth = 0.05f;
         }
 
